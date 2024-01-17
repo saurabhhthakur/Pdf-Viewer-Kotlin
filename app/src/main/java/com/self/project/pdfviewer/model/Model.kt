@@ -1,4 +1,4 @@
-package com.self.project.pdfviewer
+package com.self.project.pdfviewer.model
 
 import android.annotation.SuppressLint
 import java.text.DecimalFormat
@@ -8,7 +8,7 @@ import java.util.Date
 @SuppressLint("SimpleDateFormat")
 class Model(var fileName: String, var filePath: String, fileSize: Long, time: Long) {
     var fileSize: String
-    var lastModified : String
+    var lastModified: String
 
     init {
         val df = DecimalFormat("0.00")
@@ -29,9 +29,9 @@ class Model(var fileName: String, var filePath: String, fileSize: Long, time: Lo
     }
 
     init {
-            val date = Date(time)
-            val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a")
-            lastModified = formatter.format(date)
+        val date = Date(time)
+        val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a")
+        lastModified = formatter.format(date)
     }
 
 

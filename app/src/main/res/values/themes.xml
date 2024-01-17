@@ -1,11 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
     <style name="Base.Theme.PDFViewer" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:statusBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="M">true</item>
+
+        <item name="popupMenuBackground">@drawable/option_menu</item>
+
     </style>
 
     <style name="Theme.PDFViewer" parent="Base.Theme.PDFViewer" />
+
+    <style name="PreferenceScreenTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/yellow_color</item>
+    </style>
+
 </resources>

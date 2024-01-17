@@ -1,9 +1,10 @@
-package com.self.project.pdfviewer
+package com.self.project.pdfviewer.repository
 
 import android.os.Environment
+import com.self.project.pdfviewer.model.Model
 import java.io.File
 
-class Repository {
+object Repository {
     private lateinit var data: MutableList<Model>
     private val directory = File(Environment.getExternalStorageDirectory().absolutePath)
 
@@ -26,12 +27,11 @@ class Repository {
         }
     }
 
-    private fun sortByName(pdfFiles: MutableList<Model>): List<Model> {
-        val sort = pdfFiles.sortedWith(compareBy { pdfFile ->
-            pdfFile.fileName
+    private fun sortByName(pdfFiles: List<Model>): List<Model> {
+        val sort = pdfFiles.sortedWith(compareBy {
+            it.fileName
         })
         return sort
     }
-
 
 }

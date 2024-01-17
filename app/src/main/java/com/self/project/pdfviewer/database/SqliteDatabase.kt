@@ -1,18 +1,18 @@
-package com.self.project.pdfviewer
+package com.self.project.pdfviewer.database
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.self.project.pdfviewer.model.SqliteModel
 
 class SqliteDatabase(context: Context) : SQLiteOpenHelper(context, "pdfViewer", null, 1) {
 
-    override fun onCreate(p0: SQLiteDatabase?) {
-        p0?.execSQL("CREATE TABLE pdfFiles(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,page INTEGER)")
+    override fun onCreate(database: SQLiteDatabase?) {
+        database?.execSQL("CREATE TABLE pdfFiles(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,page INTEGER)")
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS pdfFiles")
         onCreate(db)
     }

@@ -1,9 +1,11 @@
-package com.self.project.pdfviewer
+package com.self.project.pdfviewer.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
+import com.self.project.pdfviewer.model.Model
 import com.self.project.pdfviewer.databinding.PdfRowBinding
 import java.util.Locale
 
@@ -11,12 +13,11 @@ class Adapter(private var arrayList: MutableList<Model>, private val listener: M
     RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     private val filteredList = mutableListOf<Model>()
-
     init {
         filteredList.addAll(arrayList)
     }
 
-    class ViewHolder(val binding: PdfRowBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: PdfRowBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(PdfRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -24,14 +25,25 @@ class Adapter(private var arrayList: MutableList<Model>, private val listener: M
     override fun getItemCount() = arrayList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.fileName.text = arrayList[position].fileName
-        holder.binding.fileSize.text = arrayList[position].fileSize
-        holder.binding.row.setOnClickListener {
-            listener.click(position)
-        }
-        holder.binding.row.setOnLongClickListener {
-            listener.longClick(position, it)
-            true
+        holder.binding.apply {
+            myVariable = arrayList[position]
+            executePendingBindings()
+            hasPendingBindings()
+
+            row.setOnClickListener {
+                listener.click(position)
+            }
+
+            val preferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.context)
+            val abc = preferences.getString("fontTitle","16").toString().trimEnd()
+            val abc2 = preferences.getString("fontSize","12").toString().trimEnd()
+            fileName.textSize = abc.toFloat()
+            fileSize.textSize = abc2.toFloat()
+
+            row.setOnLongClickListener {
+                listener.longClick(position, it)
+                true
+            }
         }
     }
 
@@ -44,12 +56,6 @@ class Adapter(private var arrayList: MutableList<Model>, private val listener: M
             )
                 arrayList.add(it)
         }
-
-        /*  if (arrayList.isEmpty()) {
-              Toast.makeText(context,"Item not found",Toast.LENGTH_SHORT).show()
-              arrayList.addAll(filteredList)
-          }*/
-
         notifyDataSetChanged()
     }
 

@@ -24,22 +24,12 @@ class SplashFragment : Fragment() {
 
         if (Intent.ACTION_VIEW == requireActivity().intent.action) {
             val bundle = Bundle()
-            var filePath = requireActivity().intent.data?.path.toString()
-            val fileName = filePath.let { File(it).name.toString() }
+            val uri = requireActivity().intent.data
+            val fileName =
+                requireActivity().intent.data?.path.toString().let { File(it).name.toString() }
 
-            if (filePath.startsWith("/external_files/$fileName")) {
-                bundle.putString("filename", fileName)
-                filePath = filePath.replace("/external_files", "/storage/emulated/0")
-            } else if (filePath.startsWith("/external_files")) {
-                bundle.putString("filename", fileName)
-                filePath = filePath.replace("/external_files", "/storage/emulated/0")
-            } else {
-               val uri = requireActivity().intent.data
-                filePath = uri.toString()
-                bundle.putInt("uriData",1)
-            }
-
-            bundle.putString("filepath", filePath)
+            bundle.putString("fileUri", uri.toString())
+            bundle.putString("filename", fileName)
             val fragment = SecondFragment()
             fragment.arguments = bundle
 

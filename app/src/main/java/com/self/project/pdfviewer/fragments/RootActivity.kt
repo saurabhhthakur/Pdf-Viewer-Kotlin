@@ -1,8 +1,8 @@
-package com.self.project.pdfviewer
+package com.self.project.pdfviewer.fragments
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.self.project.pdfviewer.fragments.SplashFragment
+import com.self.project.pdfviewer.R
 
 class RootActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

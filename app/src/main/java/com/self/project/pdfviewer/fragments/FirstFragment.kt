@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -26,13 +27,13 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.self.project.pdfviewer.Adapter
-import com.self.project.pdfviewer.Repository
-import com.self.project.pdfviewer.ManageListener
-import com.self.project.pdfviewer.Model
+import com.self.project.pdfviewer.adapter.Adapter
+import com.self.project.pdfviewer.repository.Repository
+import com.self.project.pdfviewer.adapter.ManageListener
+import com.self.project.pdfviewer.model.Model
 import com.self.project.pdfviewer.R
-import com.self.project.pdfviewer.SqliteDatabase
-import com.self.project.pdfviewer.SqliteModel
+import com.self.project.pdfviewer.database.SqliteDatabase
+import com.self.project.pdfviewer.model.SqliteModel
 import com.self.project.pdfviewer.databinding.AlertDialogBinding
 import com.self.project.pdfviewer.databinding.FirstFragmentBinding
 import java.io.File
@@ -42,7 +43,6 @@ class FirstFragment : Fragment(), ManageListener {
     private lateinit var binding: FirstFragmentBinding
     private lateinit var pdfFiles: MutableList<Model>
     private lateinit var recyclerAdapter: Adapter
-    private lateinit var getFile: Repository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,38 +53,43 @@ class FirstFragment : Fragment(), ManageListener {
 
         (activity as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-        }
+            supportActionBar?.setDisplayShowHomeEnabled(true)}
+
         setHasOptionsMenu(true)
-        getFile = Repository()
-        setData()
+        requestPermission()
         return binding.root
     }
 
-    private fun setData() {
+    private fun setVisibility(recycler: Int = View.GONE, card: Int = View.GONE, cardText: Int = View.GONE){
+        binding.recycler.visibility = recycler
+        binding.card.visibility = card
+        binding.cardText.visibility = cardText
+    }
+
+    private fun requestPermission() {
         val request =
-            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-                if (permissions[Manifest.permission.READ_EXTERNAL_STORAGE] == true &&
-                    permissions[Manifest.permission.WRITE_EXTERNAL_STORAGE] == true
-                ) {
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
+            {
+                if (it[Manifest.permission.READ_EXTERNAL_STORAGE] == true &&
+                    it[Manifest.permission.WRITE_EXTERNAL_STORAGE] == true)
                     fetchData()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Permission denied. Cannot access external storage.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                else {
+                    setVisibility(card = View.VISIBLE, cardText = View.VISIBLE)
+                    binding.cardText.text = resources.getText(R.string.permission)
                 }
 
             }
 
         if (ContextCompat.checkSelfPermission(
-                requireContext(), Manifest
-                    .permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(), Manifest
-                    .permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            == PackageManager.PERMISSION_GRANTED
         )
             fetchData()
         else
@@ -93,23 +98,30 @@ class FirstFragment : Fragment(), ManageListener {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
-
             )
-
     }
 
+    @SuppressLint("ResourceType")
     private fun fetchData() {
         pdfFiles = mutableListOf()
-        pdfFiles.addAll(getFile.getSortedData())
+        pdfFiles.addAll(Repository.getSortedData())
         recyclerAdapter = Adapter(pdfFiles, this)
-        binding.recycler.adapter = recyclerAdapter
+
+        if (recyclerAdapter.itemCount == 0) {
+            setVisibility(card = View.VISIBLE, cardText = View.VISIBLE)
+           binding.cardText.text = resources.getText(R.string.no_pdf)
+        } else {
+            setVisibility(recycler = View.VISIBLE)
+            binding.recycler.adapter = recyclerAdapter
+        }
     }
 
     override fun click(position: Int) {
         val db = context?.let { SqliteDatabase(it) }
         val bundle = Bundle()
+
         bundle.putString("filename", pdfFiles[position].fileName)
-        bundle.putString("filepath", pdfFiles[position].filePath)
+        bundle.putString("fileUri", Uri.fromFile(File(pdfFiles[position].filePath)).toString())
 
         val obj: SqliteModel? = db?.getId(pdfFiles[position].fileName)
         if (obj?.id == null) {
@@ -241,6 +253,16 @@ class FirstFragment : Fragment(), ManageListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.menu, menu)
 
+        inflater.inflate(R.menu.option_menu, menu)
+        menu.findItem(R.id.settings)?.isVisible = true
+        menu.findItem(R.id.settings).setOnMenuItemClickListener {
+            if (it.itemId == R.id.settings) {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.container, SettingsFragment())?.addToBackStack(null)?.commit()
+            }
+            true
+        }
+
         val searchItem = menu.findItem(R.id.search_icon)
         val searchView = searchItem.actionView as SearchView
         searchView.queryHint = "Search Here..."
@@ -260,6 +282,17 @@ class FirstFragment : Fragment(), ManageListener {
                 return true
             }
         })
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        val menuInflater = MenuInflater(context)
+        menuInflater.inflate(R.menu.option_menu, menu)
+
+        super.onCreateContextMenu(menu, v, menuInfo)
     }
 
 }

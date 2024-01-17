@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/imageView"
