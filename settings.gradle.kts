@@ -9,9 +9,8 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-       // maven { url ("http://jcenter.bintray.com") }
-        jcenter()
-        mavenCentral()
+        mavenCentral() // Place this first
+        maven { url = uri("https://jitpack.io") }
     }
 }
 

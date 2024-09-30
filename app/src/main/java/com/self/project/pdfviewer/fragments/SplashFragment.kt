@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.self.project.pdfviewer.R
 import java.io.File
 
@@ -21,6 +23,15 @@ class SplashFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireActivity())
+        val themePreference = sharedPreferences.getString("mode", "3") // Default to system
+
+        // Apply the saved theme mode
+        when (themePreference?.toInt()) {
+            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // Light mode
+            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) // Dark mode
+            3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) // Follow system
+        }
 
         if (Intent.ACTION_VIEW == requireActivity().intent.action) {
             val bundle = Bundle()

@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/background_color"
-        android:elevation="10dp"
+        android:backgroundTint="@color/dialog_background"
+        android:layout_margin="8dp"
         app:cardCornerRadius="15dp"
-        app:cardElevation="10dp"
+        app:cardElevation="4dp"
         app:contentPadding="10dp">
 
         <RelativeLayout
@@ -21,6 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:clickable="true"
+                android:textColor="@color/icon_color"
                 android:focusable="true"
                 android:fontFamily="@font/poppins_semibold"
                 android:foreground="?attr/selectableItemBackground"
@@ -36,6 +37,7 @@
                 android:layout_below="@id/rename"
                 android:layout_marginHorizontal="30dp"
                 android:clickable="true"
+                android:textColor="@color/icon_color"
                 android:focusable="true"
                 android:fontFamily="@font/poppins_semibold"
                 android:foreground="?attr/selectableItemBackground"
@@ -52,6 +54,7 @@
                 android:layout_marginHorizontal="30dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:textColor="@color/icon_color"
                 android:fontFamily="@font/poppins_semibold"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="13dp"
@@ -66,6 +69,7 @@
                 android:layout_below="@id/share"
                 android:layout_marginHorizontal="30dp"
                 android:clickable="true"
+                android:textColor="@color/icon_color"
                 android:focusable="true"
                 android:fontFamily="@font/poppins_semibold"
                 android:foreground="?attr/selectableItemBackground"
@@ -76,6 +80,6 @@
 
         </RelativeLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

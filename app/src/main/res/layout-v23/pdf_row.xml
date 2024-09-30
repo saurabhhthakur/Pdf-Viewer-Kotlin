@@ -12,7 +12,7 @@
         android:id="@+id/row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        style="@style/layout"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
@@ -28,7 +28,7 @@
             android:contentDescription="@string/todo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo" />
+            app:srcCompat="@drawable/pdf_icon" />
 
         <TextView
             android:id="@+id/file_name"
@@ -39,7 +39,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{myVariable.fileName}"
-            android:textColor="@color/black"
+            style="@style/toolbarTv"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +57,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:text="@{myVariable.fileSize}"
-            android:textColor="@color/black"
+            style="@style/toolbarTv"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/file_name" />
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="18dp"
-            android:background="@color/secondary_color"
+            style="@style/toolbarTv"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

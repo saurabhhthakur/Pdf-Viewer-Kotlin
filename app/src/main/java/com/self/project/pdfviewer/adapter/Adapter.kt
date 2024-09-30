@@ -2,6 +2,7 @@ package com.self.project.pdfviewer.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +10,7 @@ import com.self.project.pdfviewer.model.Model
 import com.self.project.pdfviewer.databinding.PdfRowBinding
 import java.util.Locale
 
-class Adapter(private var arrayList: MutableList<Model>, private val listener: ManageListener) :
+class Adapter(private var arrayList: MutableList<Model>, private val onClick:(Int) -> Unit,private val onLongClick:(Int, View) -> Unit) :
     RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     private val filteredList = mutableListOf<Model>()
@@ -31,7 +32,7 @@ class Adapter(private var arrayList: MutableList<Model>, private val listener: M
             hasPendingBindings()
 
             row.setOnClickListener {
-                listener.click(position)
+                onClick.invoke(position)
             }
 
             val preferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.context)
@@ -41,7 +42,7 @@ class Adapter(private var arrayList: MutableList<Model>, private val listener: M
             fileSize.textSize = abc2.toFloat()
 
             row.setOnLongClickListener {
-                listener.longClick(position, it)
+                onLongClick.invoke(position, it)
                 true
             }
         }

@@ -7,4 +7,15 @@
     <color name="red_color">#FF1300</color>
     <color name="yellow_color">#FDD835</color>
 
+    <color name="my_background_color">#FFFFFF</color>
+
+
+    <color name="dialog_background">#FFFFFF</color>
+
+
+    <color name="icon_color">#000000</color>
+    <color name="search_box_hint">#BDBDBD</color>
+    <color name="search_box">#000000</color>
+    <color name="search_background">#DEDCDC</color>
+
 </resources>

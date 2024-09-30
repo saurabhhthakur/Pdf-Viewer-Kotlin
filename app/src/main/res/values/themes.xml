@@ -10,9 +10,24 @@
 
     <style name="Theme.PDFViewer" parent="Base.Theme.PDFViewer" />
 
-    <style name="PreferenceScreenTitle">
+ <!--   <style name="PreferenceScreenTitle">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/yellow_color</item>
+    </style>-->
+
+
+
+    <style name="layout">
+        <item name="android:background">@color/white</item>
     </style>
+
+    <style name="myTextColor">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="toolbarTv">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 
 </resources>
