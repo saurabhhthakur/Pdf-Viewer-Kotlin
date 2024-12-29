@@ -16,13 +16,41 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
 
+    private val sharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(requireActivity())
+    }
+
+    private val themePreference by lazy {
+        sharedPreferences.getString("mode", "3")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        listener =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreference, key ->
+                if (key == "mode") {
+                    val pref = sharedPreference.getString(key, "3")
+                    when (pref?.toInt()) {
+                        1 ->
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+                        2 ->
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+                        3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    }
+                }
+            }
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireActivity())
-        val themePreference = sharedPreferences.getString("mode", "3") // Default to system
+
 
         // Apply the saved theme mode
         when (themePreference?.toInt()) {
@@ -51,24 +79,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         requireContext(),
                         R.color.my_background_color
                     )
-                )} // Follow system
+                )
+            } // Follow system
         }
-
-        listener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreference, key ->
-                if (key == "mode") {
-                    val pref = sharedPreference.getString(key, "3")
-                    when (pref?.toInt()) {
-                        1 ->
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-                        2 ->
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
-                        3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    }
-                }
-            }
 
         PreferenceManager.getDefaultSharedPreferences(requireContext())
             .registerOnSharedPreferenceChangeListener(listener)
